@@ -7,9 +7,9 @@ public class practice16 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-//		prac1();
+		prac1();
 //		prac2();
-		prac3();
+//		prac3();
 		
 		
 	}

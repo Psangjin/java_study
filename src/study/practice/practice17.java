@@ -7,12 +7,12 @@ public class practice17 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-//		prac1 ();
+		prac1 ();
 //		prac2 ();
 //		prac3 ();
 //		prac4 ();
 //		prac5 ();
-		prac6 ();
+//		prac6 ();
 		
 		
 		
