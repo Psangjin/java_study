@@ -24,8 +24,8 @@ public class BluetoothMike extends Mike {
 	//가지고 있는 정보를 문자열로 리턴하기
 	public String toString() {
 		
-//		String str = model + "  " + price 
-//				+ "유형 : " + type + "연결여부:" + (isConnect ? "O" : "X") ; 
+		String str = model + "  " + price 
+				+ "유형 : " + type + "연결여부:" + (isConnect ? "O" : "X") ; 
 		String str = String.format("%s 가격: %d 유형: %s 연결여부:%s",model, price, type, (isConnect ? "O" : "X"));	//포멧에 의해 만들어진 스트링을 나타내 보여줌
 		return str;
 		
