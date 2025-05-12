@@ -15,7 +15,11 @@ public class FoodTruckMain {
 		
 		ft1.doSales();
 		
-		
+		/*
+		FoodTruck ft2 = new FoodTruck("내일중식", "김중식");
+		// 메뉴
+		ft2.doSales();
+		*/
 		
 	}
 
