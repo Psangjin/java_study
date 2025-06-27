@@ -1,4 +1,4 @@
-package study.db.v1;
+package study.db.v2;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,8 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-public class DBselectObject {
+public class DBSelectObject {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -67,34 +68,15 @@ public class DBselectObject {
 	
 	public static void findDept() {
 
-		// OracleDB 연결
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// DB연결정보
-		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl";
-		String db_id = "scott";
-		String db_pw = "tiger";
 
 		// DB연결 및 사용시 필요한 객체
 		Connection conn = null; // DB 연결 객체
 		PreparedStatement psmt = null; // DB 연결후, sql 명령 실행해주는 객체
 		ResultSet rs = null; // sql Select 실행 후 조회 결과가 저장되는 객체
 
-		// DB 연결
-		try {
-			conn = DriverManager.getConnection(db_url, db_id, db_pw);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		conn = DBConnectionManager.connectDB();
 
 		// 쿼리 준비
-
 		String query = "select * from dept";
 
 		try {
@@ -120,57 +102,18 @@ public class DBselectObject {
 			e.printStackTrace();
 		}
 
-		// DB연결 종료
-
-		try {
-
-			if (rs != null)
-				rs.close();
-
-			if (psmt != null)
-				psmt.close();
-
-			if (conn != null) {
-				conn.close();
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		DBConnectionManager.disconnectDB(conn, psmt, rs);
 	}
 	
 	public static void findDeptSingle() {
-
-		// OracleDB 연결
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// DB연결정보
-		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl";
-		String db_id = "scott";
-		String db_pw = "tiger";
-
 		// DB연결 및 사용시 필요한 객체
 		Connection conn = null; // DB 연결 객체
 		PreparedStatement psmt = null; // DB 연결후, sql 명령 실행해주는 객체
 		ResultSet rs = null; // sql Select 실행 후 조회 결과가 저장되는 객체
 
-		// DB 연결
-		try {
-			conn = DriverManager.getConnection(db_url, db_id, db_pw);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		conn = DBConnectionManager.connectDB();
 
 		// 쿼리 준비
-
 		String query = "select * from dept where deptno = 30 ";
 
 		try {
@@ -191,105 +134,42 @@ public class DBselectObject {
 			e.printStackTrace();
 		}
 
-		// DB연결 종료
-
-		try {
-
-			if (rs != null)
-				rs.close();
-
-			if (psmt != null)
-				psmt.close();
-
-			if (conn != null) {
-				conn.close();
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		DBConnectionManager.disconnectDB(conn, psmt, rs);
 	}
 	
 	public static Dept findDeptByDeptno(int deptno) {
-
-		// OracleDB 연결
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// DB연결정보
-		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl";
-		String db_id = "scott";
-		String db_pw = "tiger";
 
 		// DB연결 및 사용시 필요한 객체
 		Connection conn = null; // DB 연결 객체
 		PreparedStatement psmt = null; // DB 연결후, sql 명령 실행해주는 객체
 		ResultSet rs = null; // sql Select 실행 후 조회 결과가 저장되는 객체
 
-		// DB 연결
-		try {
-			conn = DriverManager.getConnection(db_url, db_id, db_pw);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		conn = DBConnectionManager.connectDB();
 
 		// 쿼리 준비
-
 		String query = "select * from dept where deptno = ? ";		
-
 		
 		Dept dept = null; 
 		
 		try {
-
 			psmt = conn.prepareStatement(query); // 쿼리실행 준비객체
 			 
 			//파라미터 세팅
 			psmt.setInt(1, deptno); //쿼리에 있는 첫번째 ? 위치에 deptno 를 세팅하겠다
-			
 			rs = psmt.executeQuery(); // 쿼리 실행 후 결과 저장
 
-			// ResultSet rs 에 담겨져있는 쿼리 수행결과 확인
 			if(rs.next()) { // 읽어올 데이터가 1개만 있는 경우?
-				
 				dept = new Dept();
-				
 				dept.setDeptno(rs.getInt("DEPTNO"));
 				dept.setDname(rs.getString("DNAME"));
 				dept.setLoc(rs.getString("LOC"));
-				
 			}
-
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		// DB연결 종료
-		try {
-
-			if (rs != null)
-				rs.close();
-
-			if (psmt != null)
-				psmt.close();
-
-			if (conn != null) {
-				conn.close();
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		DBConnectionManager.disconnectDB(conn, psmt, rs);
 		
 		return dept;
 
@@ -297,31 +177,14 @@ public class DBselectObject {
 	
 	public static Dept findDeptByDname(String dname) {
 
-		// OracleDB 연결
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// DB연결정보
-		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl";
-		String db_id = "scott";
-		String db_pw = "tiger";
+		
 
 		// DB연결 및 사용시 필요한 객체
 		Connection conn = null; // DB 연결 객체
 		PreparedStatement psmt = null; // DB 연결후, sql 명령 실행해주는 객체
 		ResultSet rs = null; // sql Select 실행 후 조회 결과가 저장되는 객체
 
-		// DB 연결
-		try {
-			conn = DriverManager.getConnection(db_url, db_id, db_pw);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		conn = DBConnectionManager.connectDB();
 
 		// 쿼리 준비
 
@@ -355,23 +218,7 @@ public class DBselectObject {
 			e.printStackTrace();
 		}
 
-		// DB연결 종료
-		try {
-
-			if (rs != null)
-				rs.close();
-
-			if (psmt != null)
-				psmt.close();
-
-			if (conn != null) {
-				conn.close();
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		DBConnectionManager.disconnectDB(conn, psmt, rs);
 		
 		
 		return dept;
@@ -380,31 +227,13 @@ public class DBselectObject {
 	//findDeptAll
 	public static List<Dept> findDeptList() {   
 
-		// OracleDB 연결
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// DB연결정보
-		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl";
-		String db_id = "scott";
-		String db_pw = "tiger";
 
 		// DB연결 및 사용시 필요한 객체
 		Connection conn = null; // DB 연결 객체
 		PreparedStatement psmt = null; // DB 연결후, sql 명령 실행해주는 객체
 		ResultSet rs = null; // sql Select 실행 후 조회 결과가 저장되는 객체
 
-		// DB 연결
-		try {
-			conn = DriverManager.getConnection(db_url, db_id, db_pw);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		conn = DBConnectionManager.connectDB();
 
 		// 쿼리 준비
 		String query = "select * from dept where 1=2";
@@ -437,56 +266,19 @@ public class DBselectObject {
 			e.printStackTrace();
 		}
 
-		// DB연결 종료
-
-		try {
-
-			if (rs != null)
-				rs.close();
-
-			if (psmt != null)
-				psmt.close();
-
-			if (conn != null) {
-				conn.close();
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		DBConnectionManager.disconnectDB(conn, psmt, rs);
 		
 		return deptList;
 	}
 	
 	public static List<Dept> findDeptListAs() {   
 
-		// OracleDB 연결
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// DB연결정보
-		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl";
-		String db_id = "scott";
-		String db_pw = "tiger";
-
 		// DB연결 및 사용시 필요한 객체
 		Connection conn = null; // DB 연결 객체
 		PreparedStatement psmt = null; // DB 연결후, sql 명령 실행해주는 객체
 		ResultSet rs = null; // sql Select 실행 후 조회 결과가 저장되는 객체
 
-		// DB 연결
-		try {
-			conn = DriverManager.getConnection(db_url, db_id, db_pw);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		conn = DBConnectionManager.connectDB();
 
 		// 쿼리 준비
 		String query = "select deptno dpno, dname dnme from dept";
@@ -511,25 +303,7 @@ public class DBselectObject {
 			e.printStackTrace();
 		}
 
-		// DB연결 종료
-
-		try {
-
-			if (rs != null)
-				rs.close();
-
-			if (psmt != null)
-				psmt.close();
-
-			if (conn != null) {
-				conn.close();
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		DBConnectionManager.disconnectDB(conn, psmt, rs);
 		
 		return deptList;
 	}
